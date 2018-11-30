@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/erithr/bamazon#readme",
   "dependencies": {
+    "dotenv": "^6.1.0",
+    "env": "0.0.2",
     "inquirer": "^6.2.0",
     "joi": "^14.3.0",
     "markdown-table": "^1.1.2",

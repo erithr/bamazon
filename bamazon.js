@@ -1,7 +1,11 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
-var table = require('markdown-table');
+const table = require('markdown-table');
 const Joi = require('joi');
+require('dotenv').config();
+const keys = require("./keys");
+const root = keys.password.id;
+
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -13,15 +17,28 @@ const connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "",
+  password: "" + root,
   database: "bamazon"
 });
 // this function will take the inquirer input and validate it to make sure that it is a number between 2 and 999 using the NPM package Joi. 
-const validateInput = (age) => {
+const validateId = (id) => {
     let valid; 
-    Joi.validate(age, Joi.number().required().min(1).max(999), (err, val)=> {
+    Joi.validate(id, Joi.number().required().min(1).max(10), (err, val)=> {
         if (err){
             valid = 'Please enter an ID number listed.';
+        }
+        else {
+            valid = true;
+        }
+    });
+    return valid;
+
+}
+const validateQuantity = (quantity) => {
+    let valid; 
+    Joi.validate(quantity, Joi.number().required().min(1).max(999), (err, val)=> {
+        if (err){
+            valid = 'Not allowed to buy that ammout!';
         }
         else {
             valid = true;
@@ -36,13 +53,13 @@ const getUserInput = () => {
             name: "id",
             type: "input",
             message: "Please enter the id number of the product you wish to buy:",
-            validate: validateInput,
+            validate: validateId,
         },
         {
             name: "quantity",
             type: "input",
             message: "How Many:",
-            validate: validateInput
+            validate: validateQuantity
         }
     ]).then(answers => {
         let item = answers.id;
@@ -54,7 +71,7 @@ const getUserInput = () => {
        connection.query(query, {id: item}, (err, data)=> {
            if (err) throw err;
 
-           if (data.lenght ===0){
+           if (data.lenght ===10){
                console.log('ERROR: Invalid ID Entered. Please Enter Existing Item ID.')
                displayProducts();
            }else{
