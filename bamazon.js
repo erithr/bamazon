@@ -96,7 +96,7 @@ const getUserInput = () => {
                 console.log('Please modify your order.');
                 console.log("\n---------------------------------------------------------------------\n");
 
-                displayInventory();
+                displayProducts();
                }
            }
        })
